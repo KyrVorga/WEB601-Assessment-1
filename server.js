@@ -13,7 +13,7 @@ app.set('view engine', 'ejs')
 app.use(cors());
 
 // Returns a middleware to serve favicon - not working / crashing site
-// app.use(favicon(path.join(__dirname, 'public', 'asset', 'favicon.ico')))
+app.use(favicon(path.join(__dirname, 'public', 'assets', 'favicon.ico')))
 
 // making the public folder public
 app.use(express.static(path.join(__dirname, 'public')))
