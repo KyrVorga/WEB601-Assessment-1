@@ -4,7 +4,10 @@ const app = express()
 const cors = require("cors");
 const favicon = require('serve-favicon');
 const path = require('path');
-const port = 3000
+require('dotenv').config()
+const port = process.env.PORT
+
+const userRoute = require("./routes/user")
 
 // setting template engine with ejs
 app.set('view engine', 'ejs')
@@ -39,6 +42,9 @@ app.get('/views/about.ejs', (req, res) => {
 app.get('/views/contact.ejs', (req, res) => {
     res.render('contact.ejs')
 })
+
+
+app.use("/api/user/", userRoute);
 
 
 // start server
