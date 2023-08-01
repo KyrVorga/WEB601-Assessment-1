@@ -1,0 +1,52 @@
+{
+  "posts": {
+    "post456": {
+      "userId": "user789",
+      "title": "Introduction to Blogging",
+      "content": "Post text.",
+      "createdAt": "26-07-2023T15:00:00.000Z",
+      "comments": [
+        "comment123",
+        "comment632",
+        "comment789",
+        "comment193"
+      ]
+    }
+  },
+  "comments": {
+    "comment123": {
+      "postId": "post456",
+      "userId": "user789",
+      "content": "This is a great post!",
+      "createdAt": "2023-07-26T12:34:56Z",
+      "replies": [
+        "comment632",
+        "comment193"
+      ]
+    }
+  },
+  "users": {
+    "john_doe": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "password": "hashed_and_salted_password",
+      "comments": [
+        "comment123",
+        "comment789"
+      ],
+      "posts": [
+        "post456"
+      ]
+    },
+    "jane_doe": {
+      "name": "Jane Doe",
+      "email": "jane@example.com",
+      "password": "secretpassword123"
+    },
+    "KyrVorga": {
+      "name": "Rhylei Tremlett",
+      "email": "Rhylei@aureate.dev",
+      "password": "secretpassword123"
+    }
+  }
+}
