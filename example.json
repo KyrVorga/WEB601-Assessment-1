@@ -19,8 +19,7 @@
     },
     "users": 
     {
-        "user789": {
-            "username": "john_doe",
+        "john_doe": {
             "name": "John Doe",
             "email": "john@example.com",
             "password": "hashed_and_salted_password",
