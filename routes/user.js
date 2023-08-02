@@ -9,16 +9,15 @@ const app = express();
 app.post('/register', async (req, res, next) => {
     let jsonData = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
     try {
-        const { username, name, email, password } = req.body;
+        const { username, password } = req.body;
 
         // Check if the username or email already exists in the database
         console.log(jsonData['users']);
         if (!Object.hasOwn(jsonData['users'], username)) {
             jsonData['users'][username] = {
-                "name": name,
-                "email": email,
                 "password": password, // should be hashed ideally
             }
+            
             // Respond with a success message
             res.status(201).json({
                 message: 'User registration successful.',
@@ -35,7 +34,42 @@ app.post('/register', async (req, res, next) => {
         }
         finally {
             fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
-            // save('./data/data.json', jsonData)
+        }
+    }
+);
+
+
+app.post('/login', async (req, res, next) => {
+    let jsonData = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
+    try {
+        const { username, password } = req.body;
+
+        // Check if the username or email already exists in the database
+        console.log(jsonData['users']);
+        if (Object.hasOwn(jsonData['users'], username)) {
+            if (jsonData['users'][username].password == password) {
+                // do the login stuff
+            }
+            // Respond with a success message
+            // probably also return a token or something
+            res.status(201).json({
+                message: 'User login successful.',
+            });
+        } else {
+            res.status(501).json({
+                message: 'User login unsuccessful. User doesn\'t exists.',
+            });
+        }
+    
+        } catch (error) {
+        // If there's an error, respond with an error message
+        res.status(500).json({ error: 'User login failed. Please try again.' });
+        }
+        finally {
+            // uncomment this out if changes are made to the data,
+            // e.g., user login status to prevent multiple sessions.
+
+            // fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
         }
     }
 );
