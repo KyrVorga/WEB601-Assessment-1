@@ -25,4 +25,6 @@ npm i bootstrap@latest (install bootstraps latest version)
 
 npm i bootstrap jquery --save (install jquery for bootstrap functionality)
 
-npm install express serve-favicon (install express serve-favicon for browser icon)
+npm i express serve-favicon (install express serve-favicon for browser icon)
+
+npm i dotenv (install dotenv for .env file)

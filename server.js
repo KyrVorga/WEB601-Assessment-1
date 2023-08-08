@@ -38,8 +38,8 @@ app.get('/views/post.ejs', (req, res) => {
 app.get('/views/about.ejs', (req, res) => {
     res.render('about.ejs')
 })
-app.get('/views/contact.ejs', (req, res) => {
-    res.render('contact.ejs')
+app.get('/views/login.ejs', (req, res) => {
+    res.render('login.ejs')
 })
 
 
