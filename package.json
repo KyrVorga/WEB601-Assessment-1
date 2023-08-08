@@ -7,6 +7,7 @@
     "express": "^4.18.2",
     "jquery": "^3.7.0",
     "node": "^20.5.0",
+    "save": "^2.9.0",
     "serve-favicon": "^2.5.0",
     "webkit": "^0.0.0"
   },
