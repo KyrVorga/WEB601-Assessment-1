@@ -13,7 +13,7 @@ npm i node (install node.js)
 
 npm i express (install express.js)
 
-npm i cors (install cors for middleware functionality)
+npm i body-parser (install body parser for middleware functionality)
 
 npm i webkit (install webkit for CSS functionality)
 

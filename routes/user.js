@@ -38,7 +38,6 @@ app.post('/register', async (req, res, next) => {
     }
 );
 
-
 app.post('/login', async (req, res, next) => {
     let jsonData = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
     try {
@@ -74,5 +73,4 @@ app.post('/login', async (req, res, next) => {
     }
 );
 
-  
 module.exports = app;
