@@ -1,7 +1,6 @@
 const express = require("express");
-// const {read, save} = require('../helpers/save_load.js')
 const fs = require("fs");
-
+const { createToken } = require('../helpers/auth_jwt')
 const app = express();
 
 app.post('/register', async (req, res, next) => {
@@ -39,17 +38,18 @@ app.post('/login', async (req, res, next) => {
     let jsonData = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
     try {
         const { username, password } = req.body;
-
         // Check if the username or email already exists in the database
         if (Object.hasOwn(jsonData['users'], username)) {
-            if (jsonData['users'][username].password == password) {
-                // do the login stuff
+            if (jsonData['users'][username].password == String(password)) {
+                const accessToken = createToken(username);
+                
+                res.status(201).json({
+                    message: 'User login successful.',
+                    token: accessToken
+                });
             }
             // Respond with a success message
             // probably also return a token or something
-            res.status(201).json({
-                message: 'User login successful.',
-            });
         } else {
             res.status(501).json({
                 message: 'User login unsuccessful. User doesn\'t exists.',
@@ -58,7 +58,8 @@ app.post('/login', async (req, res, next) => {
     
         } catch (error) {
         // If there's an error, respond with an error message
-        res.status(500).json({ error: 'User login failed. Please try again.' });
+            console.log(error)
+            res.status(500).json({ error: 'Something went wrong. Please try again.' });
         }
         finally {
             // uncomment this out if changes are made to the data,
