@@ -47,10 +47,10 @@ app.use("/api/user/", userRoute)
 //     ;  
 // }); 
 
-app.post('/login', (req, res) => {
-    // Insert Login Code Here
+// app.post('/login', (req, res) => {
+//     // Insert Login Code Here
     
-})
+// })
 
 // start server
 app.listen(port, () => {
