@@ -2,8 +2,6 @@ const express = require("express");
 // const {read, save} = require('../helpers/save_load.js')
 const fs = require("fs");
 
-require('dotenv').config()
-
 const app = express();
 
 app.post('/register', async (req, res, next) => {
@@ -12,7 +10,6 @@ app.post('/register', async (req, res, next) => {
         const { username, password } = req.body;
 
         // Check if the username or email already exists in the database
-        console.log(jsonData['users']);
         if (!Object.hasOwn(jsonData['users'], username)) {
             jsonData['users'][username] = {
                 "password": password, // should be hashed ideally
@@ -44,7 +41,6 @@ app.post('/login', async (req, res, next) => {
         const { username, password } = req.body;
 
         // Check if the username or email already exists in the database
-        console.log(jsonData['users']);
         if (Object.hasOwn(jsonData['users'], username)) {
             if (jsonData['users'][username].password == password) {
                 // do the login stuff
