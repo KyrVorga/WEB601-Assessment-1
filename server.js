@@ -3,11 +3,22 @@ const express = require('express')
 const app = express()
 const favicon = require('serve-favicon')
 const path = require('path')
-const port = 3000
+require("dotenv").config();
 const bodyParser = require('body-parser')
-
+const cors = require('cors')
+const helmet = require('helmet');
+const port = process.env.PORT;
 const userRoute = require("./routes/user")
 
+app.use(cors())
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", 'code.jquery.com', 'maxcdn.bootstrapcdn.com', 'cdn.jsdelivr.net', 'use.fontawesome.com', 'ff.kis.v2.scr.kaspersky-labs.com'],
+      styleSrc: ["'self'", 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
+      fontSrc: ["'self'", 'fonts.gstatic.com']
+    }
+   }));
 // setting template engine with ejs
 app.set('view engine', 'ejs')
 
