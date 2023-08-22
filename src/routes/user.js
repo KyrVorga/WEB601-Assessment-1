@@ -15,18 +15,18 @@ app.post('/register', async (req, res, next) => {
             }
             
             // Respond with a success message
-            res.status(201).json({
+            res.status(201).send({
                 message: 'User registration successful.',
             });
         } else {
-            res.status(501).json({
-                message: 'User registration unsuccessful. User already exists.',
+            res.status(400).send({
+                error: 'User registration unsuccessful. User already exists.',
             });
         }
     
         } catch (error) {
         // If there's an error, respond with an error message
-        res.status(500).json({ error: 'User registration failed. Please try again.' });
+        res.status(400).send({ error: 'User registration failed. Please try again.' });
         }
         finally {
             fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
@@ -51,15 +51,15 @@ app.post('/login', async (req, res, next) => {
             // Respond with a success message
             // probably also return a token or something
         } else {
-            res.status(501).json({
-                message: 'User login unsuccessful. User doesn\'t exists.',
+            res.status(400).json({
+                error: 'User login unsuccessful. User doesn\'t exists.',
             });
         }
     
         } catch (error) {
         // If there's an error, respond with an error message
             console.log(error)
-            res.status(500).json({ error: 'Something went wrong. Please try again.' });
+            res.status(400).json({ error: 'Something went wrong. Please try again.' });
         }
         finally {
             // uncomment this out if changes are made to the data,
