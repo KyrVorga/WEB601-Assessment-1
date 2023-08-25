@@ -1,7 +1,7 @@
-document.getElementById('login').addEventListener('click', async() => {
+document.getElementById('login-btn').addEventListener('click', async() => {
     data = {
-        username: document.getElementById('username').innerText,
-        password: document.getElementById('password').innerText
+        username: document.getElementById('username-input').value,
+        password: document.getElementById('password-input').value
     }
 
     const response = await fetch('/api/user/login', {
@@ -16,5 +16,7 @@ document.getElementById('login').addEventListener('click', async() => {
         referrerPolicy: "same-origin",
         body: JSON.stringify(data),
     });
-    console.log(response.json());
+
+    const body = await response.json();
+    console.log(body.token);
 })

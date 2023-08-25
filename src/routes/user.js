@@ -4,13 +4,13 @@ const { createToken } = require('../../bin/auth_jwt')
 const app = express();
 
 app.post('/login', async (req, res, next) => {
-    let jsonData = JSON.parse(fs.readFileSync('../../data/data.json', 'utf8'));
+    let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
     try {
         const { username, password } = req.body;
         // Check if the username or email already exists in the database
-        if (Object.hasOwn(jsonData['users'], username)) {
-            if (jsonData['users'][username].password == String(password)) {
-                const accessToken = createToken(username);
+        if (Object.hasOwn(jsonData['users'], username.toLowerCase())) {
+            if (jsonData['users'][username.toLowerCase()].password == String(password)) {
+                const accessToken = createToken(username.toLowerCase());
                 
                 res.status(201).json({
                     message: 'User login successful.',
@@ -40,7 +40,7 @@ app.post('/login', async (req, res, next) => {
 );
 
 app.post('/register', async (req, res, next) => {
-    let jsonData = JSON.parse(fs.readFileSync('../../data/data.json', 'utf8'));
+    let jsonData = JSON.parse(fs.readFileSync('/data/data.json', 'utf8'));
     try {
         const { username, password } = req.body;
 
