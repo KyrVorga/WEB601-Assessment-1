@@ -1,6 +1,6 @@
 const express = require("express");
 const fs = require("fs");
-const { createToken } = require('../../bin/auth_jwt')
+const { createToken, authuorizeToken } = require('../../bin/auth_jwt')
 const app = express();
 
 app.post('/login', async (req, res, next) => {

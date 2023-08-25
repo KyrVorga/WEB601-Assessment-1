@@ -9,14 +9,15 @@ const cors = require('cors')
 const helmet = require('helmet');
 const port = process.env.PORT;
 const userRoute = require("./src/routes/user")
+const commentRoute = require("./src/routes/comment")
 
 app.use(cors())
 app.use(helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'code.jquery.com', 'maxcdn.bootstrapcdn.com', 'cdn.jsdelivr.net', 'use.fontawesome.com', 'ff.kis.v2.scr.kaspersky-labs.com', 'cdn.startbootstrap.com'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
-      fontSrc: ["'self'", 'fonts.gstatic.com']
+      defaultSrc: ["'self'", 'cdnjs.cloudflare.com',],
+      scriptSrc: ["'self'", 'code.jquery.com', 'maxcdn.bootstrapcdn.com', 'cdn.jsdelivr.net', 'use.fontawesome.com', 'cdn.startbootstrap.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'cdn.jsdelivr.net', 'cdnjs.cloudflare.com'],
+      fontSrc: ["'self'", 'fonts.gstatic.com', 'cdnjs.cloudflare.com']
     }
    }));
 
@@ -56,6 +57,8 @@ app.get('/views/login.ejs', (req, res) => {
 })
 
 app.use("/api/user/", userRoute)
+
+app.use("/api/comment/", commentRoute)
 
 // $.getScript('routs', function () {          
 //     ;  

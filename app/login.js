@@ -19,4 +19,5 @@ document.getElementById('login-btn').addEventListener('click', async() => {
 
     const body = await response.json();
     console.log(body.token);
+    sessionStorage.setItem('token', body.token); // write
 })

@@ -16,26 +16,32 @@ const createToken = (username) => {
 	return token;
 };
 
-const authuorizeToken = (user) => {
-	try {
-        // Get the token from the header.
-        const authHeader = req.headers["authorization"];
-        const token = authHeader && authHeader.split(" ")[1];
-        // If there is no token, throw an error.
-        if (token == null) throw new Error("No token found.");
+const authuorizeToken = () => {
+    return function (req, res, next) {
+        try {
+            //Get token from req.body
+            const token = req.body.token
 
-        // Verify the token.
-        jwt.verify(token, process.env.ACCESS_TOKEN, (err, data) => {
-            if (err || !data) {
-                throw new Error(
-                    "Your credendials are currently not authorized."
-                );
-            } else {
-               // 
+            // If there is no token, throw an error.
+            if (token == null) {
+                res.status(400).json({
+                    message: 'No token found.',
+                });
             }
-        });
-    } catch (error) {
-        next(error);
+
+            // Verify the token.
+            jwt.verify(token, process.env.API_SECRET, (err, data) => {
+                if (err || !data) {
+                    res.status(400).json({
+                        message: 'Your credendials are currently not authorized.',
+                    });
+                } else {
+                    next()
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 };
 
