@@ -13,7 +13,7 @@ app.post('/', authuorizeToken(), async (req, res, next) => {
         } catch (error) {
         // If there's an error, respond with an error message
             console.log(error)
-            res.status(400).json({ error: 'Something went wrong. Please try again.' });
+            return res.status(400).json({ error: 'Something went wrong. Please try again.' });
         }
         finally {
             // uncomment this out if changes are made to the data,

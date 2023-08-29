@@ -24,7 +24,7 @@ const authuorizeToken = () => {
 
             // If there is no token, throw an error.
             if (token == null) {
-                res.status(400).json({
+                return res.status(400).json({
                     message: 'No token found.',
                 });
             }
@@ -32,7 +32,7 @@ const authuorizeToken = () => {
             // Verify the token.
             jwt.verify(token, process.env.API_SECRET, (err, data) => {
                 if (err || !data) {
-                    res.status(400).json({
+                    return res.status(400).json({
                         message: 'Your credendials are currently not authorized.',
                     });
                 } else {
