@@ -12,7 +12,7 @@ app.post('/login', async (req, res, next) => {
             if (jsonData['users'][username.toLowerCase()].password == String(password)) {
                 const accessToken = createToken(username.toLowerCase());
                 
-                res.status(201).json({
+                return res.status(201).json({
                     message: 'User login successful.',
                     token: accessToken
                 });
@@ -20,7 +20,7 @@ app.post('/login', async (req, res, next) => {
             // Respond with a success message
             // probably also return a token or something
         } else {
-            res.status(400).json({
+            return res.status(400).json({
                 error: 'User login unsuccessful. User doesn\'t exists.',
             });
         }
@@ -28,7 +28,7 @@ app.post('/login', async (req, res, next) => {
         } catch (error) {
         // If there's an error, respond with an error message
             console.log(error)
-            res.status(400).json({ error: 'Something went wrong. Please try again.' });
+            return res.status(400).json({ error: 'Something went wrong. Please try again.' });
         }
         finally {
             // uncomment this out if changes are made to the data,
@@ -51,18 +51,18 @@ app.post('/register', async (req, res, next) => {
             }
             
             // Respond with a success message
-            res.status(201).send({
+            return res.status(201).send({
                 message: 'User registration successful.',
             });
         } else {
-            res.status(400).send({
+            return res.status(400).send({
                 error: 'User registration unsuccessful. User already exists.',
             });
         }
     
         } catch (error) {
         // If there's an error, respond with an error message
-        res.status(400).send({ error: 'User registration failed. Please try again.' });
+            return res.status(400).send({ error: 'User registration failed. Please try again.' });
         }
         finally {
             fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
