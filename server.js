@@ -1,4 +1,4 @@
-// import modules
+//SETUP - Modules
 const express = require('express')
 const app = express()
 const favicon = require('serve-favicon')
@@ -12,6 +12,7 @@ const port = process.env.PORT;
 
 const userRoute = require("./src/routes/user")
 
+//SETUP - Middleware
 // Apply content security policies and establish CORS
 app.use(cors())
 app.use(helmet.contentSecurityPolicy({
@@ -40,6 +41,9 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}))
 
 
+/* -------------------------------------------------------------------------- */
+/*                             //SECTION - Routes                             */
+/* -------------------------------------------------------------------------- */
 
 // selected starting page / API endpoint to serve index
 app.get('/', (req, res) => {
@@ -67,6 +71,7 @@ app.get('/views/login.ejs', (req, res) => {
 app.use("/api/user/", userRoute)
 
 
+//ANCHOR - Server
 // start server on port defined in .env
 app.listen(port, () => {
     console.log(`App listening at port ${port}`)

@@ -1,27 +1,36 @@
-
+//SETUP - Modules
 const express = require("express");
 const fs = require("fs");
 
 const { createToken, authuorizeToken } = require('../../bin/auth_jwt')
 const app = express();
 
+
+/* -------------------------------------------------------------------------- */
+/*                              //SECTION - Login                             */
+/* -------------------------------------------------------------------------- */
 app.post('/login', async (req, res, next) => {
-    let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
     try {
+        // load the json data file
+        let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
+
         const { username, password } = req.body;
-        // Check if the username or email already exists in the database
+
+        // Check if the username exists in the data file
         if (Object.hasOwn(jsonData['users'], username.toLowerCase())) {
+            // Check the password provided matches the one stored
             if (jsonData['users'][username.toLowerCase()].password == String(password)) {
+                // Create a new JWT
                 const accessToken = createToken(username.toLowerCase());
                 
+                // Send back the JWT
                 return res.status(201).json({
                     message: 'User login successful.',
                     token: accessToken
                 });
             }
-            // Respond with a success message
-            // probably also return a token or something
         } else {
+            // Otherwise user doesn't exist.
             return res.status(400).json({
                 error: 'User login unsuccessful. User doesn\'t exists.',
             });
@@ -32,18 +41,19 @@ app.post('/login', async (req, res, next) => {
             console.log(error)
             return res.status(400).json({ error: 'Something went wrong. Please try again.' });
         }
-        finally {
-            // uncomment this out if changes are made to the data,
-            // e.g., user login status to prevent multiple sessions.
-
-            // fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
-        }
     }
 );
+//!SECTION
 
+
+/* -------------------------------------------------------------------------- */
+/*                            //SECTION - Register                            */
+/* -------------------------------------------------------------------------- */
 app.post('/register', async (req, res, next) => {
-    let jsonData = JSON.parse(fs.readFileSync('/data/data.json', 'utf8'));
     try {
+        // load the json data file
+        let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
+
         const { username, password } = req.body;
 
         // Check if the username or email already exists in the database
@@ -51,25 +61,27 @@ app.post('/register', async (req, res, next) => {
             jsonData['users'][username] = {
                 "password": password, // should be hashed ideally
             }
+
+            // Save changes to datafile
+            fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
             
+            //FIXME - Create a token and add to response object
+
             // Respond with a success message
             return res.status(201).send({
                 message: 'User registration successful.',
             });
         } else {
+            // if user already exists return an error message
             return res.status(400).send({
                 error: 'User registration unsuccessful. User already exists.',
             });
         }
-    
-        } catch (error) {
-        // If there's an error, respond with an error message
-            return res.status(400).send({ error: 'User registration failed. Please try again.' });
-        }
-        finally {
-            fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
-        }
+    } catch (error) {
+    // If there's an error, respond with an error message
+        return res.status(400).send({ error: 'User registration failed. Please try again.' });
     }
-);
+});
+//!SECTION
 
 module.exports = app;
