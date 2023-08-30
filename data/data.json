@@ -43,10 +43,10 @@
       "email": "jane@example.com",
       "password": "secretpassword123"
     },
-    "KyrVorga": {
-      "name": "Rhylei Tremlett",
+    "kyrvorga": {
+      "name": "Rhylei",
       "email": "Rhylei@aureate.dev",
-      "password": "secretpassword123"
+      "password": "123"
     }
   }
 }
