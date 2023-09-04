@@ -24,22 +24,22 @@ app.post('/login', async (req, res, next) => {
                 const accessToken = createToken(username.toLowerCase());
                 
                 // Send back the JWT
-                return res.status(201).json({
-                    message: 'User login successful.',
+                return res.status(200).json({
+                    message: "User login successful.",
                     token: accessToken
                 });
             }
         } else {
             // Otherwise user doesn't exist.
-            return res.status(400).json({
-                error: 'User login unsuccessful. User doesn\'t exists.',
+            return res.status(404).json({
+                error: "User login unsuccessful. User doesn't exist.",
             });
         }
     
         } catch (error) {
         // If there's an error, respond with an error message
             console.log(error)
-            return res.status(400).json({ error: 'Something went wrong. Please try again.' });
+            return res.status(400).json({ error: "Something went wrong. Please try again. "});
         }
     }
 );
