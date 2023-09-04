@@ -54,22 +54,26 @@ app.post('/register', async (req, res, next) => {
         // load the json data file
         let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
 
-        const { username, password } = req.body;
+        const { username, password, name, email } = req.body;
 
         // Check if the username or email already exists in the database
-        if (!Object.hasOwn(jsonData['users'], username)) {
-            jsonData['users'][username] = {
-                "password": password, // should be hashed ideally
+        if (!Object.hasOwn(jsonData['users'], username.toLowerCase())) {
+            jsonData['users'][username.toLowerCase()] = {
+                name: name,
+                email: email,
+                password: password, // should be hashed ideally
             }
 
             // Save changes to datafile
             fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2))
             
-            //FIXME - Create a token and add to response object
+            // Create a new JWT
+            const accessToken = createToken(username.toLowerCase());
 
             // Respond with a success message
             return res.status(201).send({
                 message: 'User registration successful.',
+                token: accessToken
             });
         } else {
             // if user already exists return an error message

@@ -47,6 +47,16 @@
       "name": "Rhylei",
       "email": "Rhylei@aureate.dev",
       "password": "123"
+    },
+    "darrow": {
+      "name": "Darrow",
+      "email": "d@d.com",
+      "password": "12345"
+    },
+    "tyrmorga": {
+      "name": "Morning Star",
+      "email": "123",
+      "password": "123"
     }
   }
 }
