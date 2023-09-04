@@ -10,7 +10,7 @@ const createToken = (username) => {
         },
         process.env.API_SECRET, 
         {
-		    expiresIn: process.env.TOKEN_EXPIRY,
+		    expiresIn: process.env.TOKEN_EXPIRY, 
 	    }
     );
 	return token;
@@ -33,7 +33,7 @@ const authuorizeToken = () => {
             jwt.verify(token, process.env.API_SECRET, (err, data) => {
                 if (err || !data) {
                     return res.status(400).json({
-                        message: 'Your credendials are currently not authorized.',
+                        message: 'Your credentials are currently not authorized.',
                     });
                 } else {
                     next()

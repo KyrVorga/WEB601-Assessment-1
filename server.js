@@ -14,12 +14,12 @@ const commentRoute = require("./src/routes/comment")
 app.use(cors())
 app.use(helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'", 'cdnjs.cloudflare.com',],
-      scriptSrc: ["'self'", 'code.jquery.com', 'maxcdn.bootstrapcdn.com', 'cdn.jsdelivr.net', 'use.fontawesome.com', 'cdn.startbootstrap.com'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'cdn.jsdelivr.net', 'cdnjs.cloudflare.com'],
-      fontSrc: ["'self'", 'fonts.gstatic.com', 'cdnjs.cloudflare.com']
+        defaultSrc: ["'self'", 'cdnjs.cloudflare.com',],
+        scriptSrc: ["'self'", 'code.jquery.com', 'maxcdn.bootstrapcdn.com', 'cdn.jsdelivr.net', 'use.fontawesome.com', 'cdn.startbootstrap.com'],
+        styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'cdn.jsdelivr.net', 'cdnjs.cloudflare.com'],
+        fontSrc: ["'self'", 'fonts.gstatic.com', 'cdnjs.cloudflare.com']
     }
-   }));
+}));
 
 // setting template engine with ejs
 app.set('view engine', 'ejs')
@@ -55,19 +55,13 @@ app.get('/views/about.ejs', (req, res) => {
 app.get('/views/login.ejs', (req, res) => {
     res.render('login.ejs')
 })
+app.get('/views/register.ejs', (req, res) => {
+    res.render('register.ejs')
+})
 
 app.use("/api/user/", userRoute)
 
 app.use("/api/comment/", commentRoute)
-
-// $.getScript('routs', function () {          
-//     ;  
-// }); 
-
-// app.post('/login', (req, res) => {
-//     // Insert Login Code Here
-    
-// })
 
 // start server
 app.listen(port, () => {
