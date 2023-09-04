@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "all": "^0.0.0",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "bootstrap": "^5.3.1",
@@ -7,6 +8,7 @@
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "fs": "^0.0.1-security",
     "helmet": "^7.0.0",
     "jquery": "^3.7.0",
     "jsdoc": "^4.0.2",
@@ -24,7 +26,8 @@
   "version": "1.0.0",
   "main": "index",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -36,5 +39,8 @@
   "bugs": {
     "url": "https://github.com/KyrVorga/WEB601-Assessment-1/issues"
   },
-  "homepage": "https://github.com/KyrVorga/WEB601-Assessment-1#readme"
+  "homepage": "https://github.com/KyrVorga/WEB601-Assessment-1#readme",
+  "bin": {
+    "web601-assessment-1": "bin/auth_jwt.js"
+  }
 }
