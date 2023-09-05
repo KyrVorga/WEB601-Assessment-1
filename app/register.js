@@ -81,9 +81,9 @@ document.getElementById('register-btn').addEventListener('click', async() => {
 
     // FIXME - Should check the response to see if its an error or not. then attempt to store the token
     // Recieve response
-    const body = await response.json();
-    console.log(body.token);
+    // const body = await response.json();
+    // console.log(body.token);
 
-    // Store token into session storage
-    sessionStorage.setItem('token', body.token); // write
+    // // Store token into session storage
+    // sessionStorage.setItem('token', body.token); // write
 })

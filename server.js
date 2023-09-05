@@ -6,6 +6,9 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const helmet = require('helmet');
+const session = require('express-session')
+const fs = require("fs");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const port = process.env.PORT;
@@ -24,6 +27,26 @@ app.use(helmet.contentSecurityPolicy({
     }
 }));
 
+// enable express-session and configure
+let sess = {
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        sameSite: true
+    },
+    genid: function(req) {
+      return crypto.randomUUID() // use UUIDs for session IDs
+    }
+}
+  
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1)
+    sess.cookie.secure = true
+}
+
+app.use(session(sess))
+
 // setting template engine with ejs
 app.set('view engine', 'ejs')
 
@@ -40,6 +63,17 @@ app.use(express.json());
 // Middleware access to every domain
 app.use(bodyParser.urlencoded({extended: true}))
 
+// make session user available to ejs
+app.use(function(req, res, next) {
+    res.locals.user = req.session.user;
+    next();
+  });
+
+// middleware to test if authenticated
+function isAuthenticated (req, res, next) {
+    if (req.session.user) next()
+    else next('route')
+}
 
 /* -------------------------------------------------------------------------- */
 /*                             //SECTION - Routes                             */
@@ -66,8 +100,18 @@ app.get('/views/about.ejs', (req, res) => {
 app.get('/views/login.ejs', (req, res) => {
     res.render('login.ejs')
 })
+
 app.get('/views/register.ejs', (req, res) => {
     res.render('register.ejs')
+})
+
+app.get('/views/profile.ejs', isAuthenticated, async (req, res) => {
+    // load the json data file
+    // let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8')); 
+
+    // res.session.user
+
+    res.render('profile.ejs')
 })
 
 // register user endpoints

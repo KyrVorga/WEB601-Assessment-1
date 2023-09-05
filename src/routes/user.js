@@ -2,7 +2,7 @@
 const express = require("express");
 const fs = require("fs");
 
-const { createToken, authuorizeToken } = require('../../bin/auth_jwt')
+const { createToken } = require('../../bin/auth_jwt')
 const app = express();
 
 
@@ -22,12 +22,31 @@ app.post('/login', async (req, res, next) => {
             if (jsonData['users'][username.toLowerCase()].password == String(password)) {
                 // Create a new JWT
                 const accessToken = createToken(username.toLowerCase());
+
+                //console.log(accessToken);
+                // regenerate the session, which is good practice to help
+                // guard against forms of session fixation
+                req.session.regenerate(function (err) {
+                    if (err) next(err)
+
+                    // store user information in session, typically a user id
+                    req.session.user = jsonData['users'][username.toLowerCase()]
+                    req.session.user.username = username
+                    req.session.token = accessToken
+                    // save the session before redirection to ensure page
+                    // load does not happen before session is saved
+                    req.session.save(function (err) {
+                        if (err) return next(err)
+                        res.redirect(301, '/views/profile.ejs')
+                    })
+                })    
+
                 
                 // Send back the JWT
-                return res.status(200).json({
-                    message: "User login successful.",
-                    token: accessToken
-                });
+                // return res.status(200).json({
+                //     message: "User login successful.",
+                //     token: accessToken
+                // });
             }
         } else {
             // Otherwise user doesn't exist.
@@ -70,11 +89,27 @@ app.post('/register', async (req, res, next) => {
             // Create a new JWT
             const accessToken = createToken(username.toLowerCase());
 
+            // regenerate the session, which is good practice to help
+            // guard against forms of session fixation
+            req.session.regenerate(function (err) {
+                if (err) next(err)
+
+                // store user information in session, typically a user id
+                req.session.user = jsonData['users'][username.toLowerCase()]
+                req.session.user.username = username
+                req.session.token = accessToken
+                // save the session before redirection to ensure page
+                // load does not happen before session is saved
+                req.session.save(function (err) {
+                    if (err) return next(err)
+                    res.redirect(301, '/views/profile.ejs')
+                })
+            })    
             // Respond with a success message
-            return res.status(201).send({
-                message: 'User registration successful.',
-                token: accessToken
-            });
+            // return res.status(201).send({
+            //     message: 'User registration successful.',
+            //     token: accessToken
+            // });
         } else {
             // if user already exists return an error message
             return res.status(400).send({
@@ -87,5 +122,106 @@ app.post('/register', async (req, res, next) => {
     }
 });
 //!SECTION
+
+
+/* -------------------------------------------------------------------------- */
+/*                         //SECTION - Update user                         */
+/* -------------------------------------------------------------------------- */
+app.put('/update/:username', async (req, res, next) => {
+    try {
+        console.log(req.params.username)
+
+
+
+        // do stuff
+
+
+
+        const token = req.session.token
+
+        if (token != null) {
+            // Verify the token.
+            jwt.verify(token, process.env.API_SECRET, (err, data) => {
+                if (err || !data) {
+                    return res.status(400).json({
+                        message: 'Your credentials are currently not authorized.',
+                    });
+                }
+            });
+        } else {
+            return res.status(400).json({
+                message: 'Your credentials are currently not authorized.',
+            });
+        }
+    
+    } catch (error) {
+        // If there's an error, respond with an error message
+        console.log(error)
+        return res.status(400).send({ error: 'Something went wrong. Please try again.' });
+    }
+});
+
+
+
+
+
+//!SECTION
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                           //SECTION - Delete user                          */
+/* -------------------------------------------------------------------------- */
+app.delete('/delete/:username', async (req, res, next) => {
+    try {
+        console.log(req.params.username)
+
+
+
+        // do stuff
+        
+
+
+        
+        const token = req.session.token
+
+        if (token != null) {
+            // Verify the token.
+            jwt.verify(token, process.env.API_SECRET, (err, data) => {
+                if (err || !data) {
+                    return res.status(400).json({
+                        message: 'Your credentials are currently not authorized.',
+                    });
+                }
+            });
+        } else {
+            return res.status(400).json({
+                message: 'Your credentials are currently not authorized.',
+            });
+        }
+    
+    } catch (error) {
+    // If there's an error, respond with an error message
+        return res.status(400).send({ error: 'Something went wrong. Please try again.' });
+    }
+});
+
+
+
+
+
+//!SECTION
+
+
+/* -------------------------------------------------------------------------- */
+/*                             //SECTION - Logout                             */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+
+//!SECTION
+
 
 module.exports = app;
