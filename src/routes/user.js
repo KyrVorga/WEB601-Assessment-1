@@ -5,7 +5,6 @@ const fs = require("fs");
 const { createToken } = require('../../bin/auth_jwt')
 const app = express();
 const jwt = require('jsonwebtoken');
-const { json } = require("body-parser");
 
 
 /* -------------------------------------------------------------------------- */
@@ -25,7 +24,6 @@ app.post('/login', async (req, res, next) => {
                 // Create a new JWT
                 const accessToken = createToken(username.toLowerCase());
 
-                //console.log(accessToken);
                 // regenerate the session, which is good practice to help
                 // guard against forms of session fixation
                 req.session.regenerate(function (err) {
@@ -35,20 +33,16 @@ app.post('/login', async (req, res, next) => {
                     req.session.user = jsonData['users'][username.toLowerCase()]
                     req.session.user.username = username
                     req.session.token = accessToken
+
                     // save the session before redirection to ensure page
                     // load does not happen before session is saved
                     req.session.save(function (err) {
                         if (err) return next(err)
-                        res.redirect(301, '/views/profile.ejs')
+                        res.status(200).send({
+                            message: 'User login successful.'
+                        })
                     })
                 })    
-
-                
-                // Send back the JWT
-                // return res.status(200).json({
-                //     message: "User login successful.",
-                //     token: accessToken
-                // });
             }
         } else {
             // Otherwise user doesn't exist.
@@ -58,8 +52,7 @@ app.post('/login', async (req, res, next) => {
         }
     
         } catch (error) {
-        // If there's an error, respond with an error message
-            console.log(error)
+            // If there's an error, respond with an error message
             return res.status(400).json({ error: "Something went wrong. Please try again. "});
         }
     }
@@ -91,27 +84,27 @@ app.post('/register', async (req, res, next) => {
             // Create a new JWT
             const accessToken = createToken(username.toLowerCase());
 
-            // regenerate the session, which is good practice to help
-            // guard against forms of session fixation
-            req.session.regenerate(function (err) {
-                if (err) next(err)
 
-                // store user information in session, typically a user id
-                req.session.user = jsonData['users'][username.toLowerCase()]
-                req.session.user.username = username
-                req.session.token = accessToken
-                // save the session before redirection to ensure page
-                // load does not happen before session is saved
-                req.session.save(function (err) {
-                    if (err) return next(err)
-                    res.redirect(301, '/views/profile.ejs')
-                })
-            })    
-            // Respond with a success message
-            // return res.status(201).send({
-            //     message: 'User registration successful.',
-            //     token: accessToken
-            // });
+                // regenerate the session, which is good practice to help
+                // guard against forms of session fixation
+                req.session.regenerate(function (err) {
+                    if (err) next(err)
+
+                    // store user information in session, typically a user id
+                    req.session.user = jsonData['users'][username.toLowerCase()]
+                    req.session.user.username = username
+                    req.session.token = accessToken
+
+                    console.log(req.session, req.session.user)
+                    // save the session before redirection to ensure page
+                    // load does not happen before session is saved
+                    req.session.save(function (err) {
+                        if (err) return next(err)
+                        res.status(200).send({
+                            message: 'User registration successful.'
+                        })
+                    })
+                })     
         } else {
             // if user already exists return an error message
             return res.status(400).send({
@@ -156,10 +149,13 @@ app.put('/update/:username', async (req, res, next) => {
         // Save changes to data file
         fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2));
 
+        res.status(200).send({
+            message: 'User password changed successfully.'
+        })
+
     } catch (error) {
         // If there's an error, respond with an error message
-        console.log(error)
-        return res.status(400).send({ error: 'Something went wrong. Please try again.' });
+        return res.status(500).send({ error: 'Something went wrong. Please try again.' });
     }
 });
 
@@ -174,7 +170,7 @@ app.delete('/delete/:username', async (req, res, next) => {
     try {
         let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
         const token = req.session.token
-
+        console.log(req.session, req.session.user)
         if (token != null) {
             // Verify the token.
             jwt.verify(token, process.env.API_SECRET, (err, data) => {
@@ -186,7 +182,7 @@ app.delete('/delete/:username', async (req, res, next) => {
             });
         } 
         else {
-            return res.status(401).json({
+            return res.status(400).json({
                 message: 'Your credentials are currently not authorized.',
             });
         }
@@ -199,10 +195,23 @@ app.delete('/delete/:username', async (req, res, next) => {
         // Save changes to data file
         fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2));
 
+        req.session.user = null
+        req.session.user = token
+        req.session.save(function (err) {
+            if (err) next(err)
+
+            // regenerate the session, which is good practice to help
+            // guard against forms of session fixation
+            req.session.regenerate(function (err) {
+                if (err) next(err)
+                res.status(200).send({
+                    message: 'User deleted successfully.'
+                })
+            })
+        })
     } catch (error) {
-    // If there's an error, respond with an error message
-        console.log(error)
-        return res.status(402).send({ error: 'Something went wrong. Please try again.' });
+        // If there's an error, respond with an error message
+        return res.status(500).send({ error: 'Something went wrong. Please try again.' });
     }
 });
 
@@ -213,7 +222,46 @@ app.delete('/delete/:username', async (req, res, next) => {
 /*                             //SECTION - Logout                             */
 /* -------------------------------------------------------------------------- */
 
+app.get('/logout/', async (req, res, next) => {
+    try {
+        const token = req.session.token
 
+        if (token != null) {
+            // Verify the token.
+            jwt.verify(token, process.env.API_SECRET, (err, data) => {
+                if (err || !data) {
+                    return res.status(400).json({
+                        message: 'Your credentials are currently not authorized.',
+                    });
+                }
+            });
+        } 
+        else {
+            return res.status(400).json({
+                message: 'Your credentials are currently not authorized.',
+            });
+        }
+
+        req.session.user = null
+        req.session.user = token
+        req.session.save(function (err) {
+            if (err) next(err)
+
+            // regenerate the session, which is good practice to help
+            // guard against forms of session fixation
+            req.session.regenerate(function (err) {
+                if (err) next(err)
+                res.status(200).send({
+                    message: 'Logout successful.'
+                })
+            })
+        })
+
+    } catch (error) {
+        // If there's an error, respond with an error message
+        return res.status(500).send({ error: 'Something went wrong. Please try again.' });
+    }
+});
 //!SECTION
 
 

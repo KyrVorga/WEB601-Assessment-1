@@ -16,16 +16,12 @@ document.getElementById('register-btn').addEventListener('click', async() => {
         headers: {
             "Content-Type": "application/json"
         },
-        redirect: "follow",
         referrerPolicy: "same-origin",
         body: JSON.stringify(data),
     });
 
-    // FIXME - Should check the response to see if its an error or not. then attempt to store the token
-    // Recieve response
-    // const body = await response.json();
-    // console.log(body.token);
-
-    // // Store token into session storage
-    // sessionStorage.setItem('token', body.token); // write
+    // if the respones comes back OK then redirect to profile page
+    if (response.status === 200 && response.ok === true) {
+        window.location.replace('http://localhost:3000/views/profile.ejs')
+    }
 })

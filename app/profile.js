@@ -19,6 +19,11 @@ document.getElementById('update-password').addEventListener('click', async() => 
         referrerPolicy: "same-origin",
         body: JSON.stringify(data),
     });
+
+    
+    if (response.status === 200 && response.ok === true) {
+        alert('Password changed successfully.')
+    }
 }) 
 
 // Delete user account (on click event)
@@ -30,5 +35,10 @@ document.getElementById('delete-account').addEventListener('click', async() => {
     // Send delete request to endpoint containing user data
     const response = await fetch('/api/user/delete/'.concat(usernameId), {
         method: "DELETE",
-    });
+    });    
+
+    if (response.status === 200 && response.ok === true) {
+        alert('Account deleted successfully.')
+        window.location.replace('http://localhost:3000/views/about.ejs')
+    }
 })  

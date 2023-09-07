@@ -7,8 +7,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const helmet = require('helmet');
 const session = require('express-session')
-const fs = require("fs");
-const jwt = require("jsonwebtoken");
+const crypto = require('node:crypto')
 require("dotenv").config();
 
 const port = process.env.PORT;
@@ -29,7 +28,7 @@ app.use(helmet.contentSecurityPolicy({
 
 // enable express-session and configure
 let sess = {
-    secret: 'keyboard cat',
+    secret: 'cIjfgW1SvZkdxj0rC9ajCqBN1ULUM',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -106,11 +105,6 @@ app.get('/views/register.ejs', (req, res) => {
 })
 
 app.get('/views/profile.ejs', isAuthenticated, async (req, res) => {
-    // load the json data file
-    // let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8')); 
-
-    // res.session.user
-
     res.render('profile.ejs')
 })
 
