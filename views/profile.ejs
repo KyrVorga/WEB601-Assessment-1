@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <%- include('partials/head.ejs'); %>
+
+    <body>
+        <!-- Navigation-->
+        
+        <%- include('partials/navigation.ejs'); %>
+
+
+        <!-- Page Header-->
+        <%- include('partials/header.ejs', 
+            {
+                h1: 'Profile',
+                h2: user.name
+            }); 
+        %>
+
+        <main>
+
+            <div class="profile-info">
+                <label for="username">Username:</label>
+                <input type="text" id="username-input" value=<%- user.username %> disabled>
+            </div>
+        
+            <div class="profile-info">
+                <label for="name">Name:</label>
+                <input type="text" id="name-input" value=<%- user.name %> disabled>
+            </div>
+        
+            <div class="profile-info">
+                <label for="email">Email:</label>
+                <input type="email" id="email-input" value=<%- user.email %> disabled>
+            </div>
+        
+            <div class="profile-info">
+                <label for="password">Password:</label>
+                <input id="password-input" value=<%- user.password %>>
+            </div>
+        
+            <button id="update-password">Update Password</button>
+            <button id="delete-account">Delete Account</button>
+
+
+        </main>
+
+        
+        <%- include('partials/footer.ejs'); %>
+        
+        <script type="application/javascript" src="/profile.js"></script> 
+    </body>
+</html>

@@ -43,10 +43,25 @@
       "email": "jane@example.com",
       "password": "secretpassword123"
     },
-    "kyrvorga": {
-      "name": "Rhylei",
-      "email": "Rhylei@aureate.dev",
+    "darrow": {
+      "name": "Darrow",
+      "email": "d@d.com",
+      "password": "12345"
+    },
+    "tyrmorga": {
+      "name": "Morning Star",
+      "email": "123",
       "password": "123"
+    },
+    "xdpmage": {
+      "name": "Xander Crocker",
+      "email": "xander@gmail.com",
+      "password": "4321"
+    },
+    "a": {
+      "name": "a",
+      "email": "a",
+      "password": "b"
     }
   }
 }

@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="/views/about.ejs">WEB601 Login System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/views/about.ejs">About</a></li>
+                <% if (user) { %>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/views/profile.ejs">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" id="logout-btn">Logout</a></li>
+                <% } else { %>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/views/login.ejs">Login</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/views/register.ejs">Register</a></li>
+                <% } %>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
