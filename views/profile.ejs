@@ -21,22 +21,22 @@
 
             <div class="profile-info">
                 <label for="username">Username:</label>
-                <input type="text" id="username" value=<%- user.username %> disabled>
+                <input type="text" id="username-input" value=<%- user.username %> disabled>
             </div>
         
             <div class="profile-info">
                 <label for="name">Name:</label>
-                <input type="text" id="name" value=<%- user.name %> disabled>
+                <input type="text" id="name-input" value=<%- user.name %> disabled>
             </div>
         
             <div class="profile-info">
                 <label for="email">Email:</label>
-                <input type="email" id="email" value=<%- user.email %> disabled>
+                <input type="email" id="email-input" value=<%- user.email %> disabled>
             </div>
         
             <div class="profile-info">
                 <label for="password">Password:</label>
-                <input id="password" value=<%- user.password %>>
+                <input id="password-input" value=<%- user.password %>>
             </div>
         
             <button id="update-password">Update Password</button>
@@ -52,5 +52,7 @@
         <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
         <!-- Core theme JS-->
         <!-- <script src="/js/scripts.js"></script> -->
+        
+        <script type="application/javascript" src="/profile.js"></script> 
     </body>
 </html>

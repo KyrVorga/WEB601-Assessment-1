@@ -4,6 +4,8 @@ const fs = require("fs");
 
 const { createToken } = require('../../bin/auth_jwt')
 const app = express();
+const jwt = require('jsonwebtoken');
+const { json } = require("body-parser");
 
 
 /* -------------------------------------------------------------------------- */
@@ -129,14 +131,7 @@ app.post('/register', async (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 app.put('/update/:username', async (req, res, next) => {
     try {
-        console.log(req.params.username)
-
-
-
-        // do stuff
-
-
-
+        let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
         const token = req.session.token
 
         if (token != null) {
@@ -144,7 +139,7 @@ app.put('/update/:username', async (req, res, next) => {
             jwt.verify(token, process.env.API_SECRET, (err, data) => {
                 if (err || !data) {
                     return res.status(400).json({
-                        message: 'Your credentials are currently not authorized.',
+                        message: 'Your credentials are currently not authorized.', 
                     });
                 }
             });
@@ -153,7 +148,14 @@ app.put('/update/:username', async (req, res, next) => {
                 message: 'Your credentials are currently not authorized.',
             });
         }
-    
+
+        // update users password
+        const username = req.params.username;
+        jsonData['users'][username.toLowerCase()]['password'] = req.body.password;
+
+        // Save changes to data file
+        fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2));
+
     } catch (error) {
         // If there's an error, respond with an error message
         console.log(error)
@@ -162,11 +164,7 @@ app.put('/update/:username', async (req, res, next) => {
 });
 
 
-
-
-
 //!SECTION
-
 
 
 /* -------------------------------------------------------------------------- */
@@ -174,15 +172,7 @@ app.put('/update/:username', async (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 app.delete('/delete/:username', async (req, res, next) => {
     try {
-        console.log(req.params.username)
-
-
-
-        // do stuff
-        
-
-
-        
+        let jsonData = await JSON.parse(fs.readFileSync('data/data.json', 'utf8'));
         const token = req.session.token
 
         if (token != null) {
@@ -194,31 +184,34 @@ app.delete('/delete/:username', async (req, res, next) => {
                     });
                 }
             });
-        } else {
-            return res.status(400).json({
+        } 
+        else {
+            return res.status(401).json({
                 message: 'Your credentials are currently not authorized.',
             });
         }
-    
+
+        //console.log(jsonData);
+        // Delete user functionality (Works but throws err on else statement above)
+        const username = req.params.username;
+        delete jsonData['users'][username.toLowerCase()];
+
+        // Save changes to data file
+        fs.writeFileSync('./data/data.json', JSON.stringify(jsonData, null, 2));
+
     } catch (error) {
     // If there's an error, respond with an error message
-        return res.status(400).send({ error: 'Something went wrong. Please try again.' });
+        console.log(error)
+        return res.status(402).send({ error: 'Something went wrong. Please try again.' });
     }
 });
 
 
-
-
-
 //!SECTION
-
 
 /* -------------------------------------------------------------------------- */
 /*                             //SECTION - Logout                             */
 /* -------------------------------------------------------------------------- */
-
-
-
 
 
 //!SECTION

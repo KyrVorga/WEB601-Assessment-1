@@ -39,7 +39,7 @@ let sess = {
       return crypto.randomUUID() // use UUIDs for session IDs
     }
 }
-  
+
 if (app.get('env') === 'production') {
     app.set('trust proxy', 1)
     sess.cookie.secure = true
@@ -67,7 +67,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(function(req, res, next) {
     res.locals.user = req.session.user;
     next();
-  });
+});
 
 // middleware to test if authenticated
 function isAuthenticated (req, res, next) {
