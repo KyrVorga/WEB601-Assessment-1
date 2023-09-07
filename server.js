@@ -80,17 +80,10 @@ function isAuthenticated (req, res, next) {
 
 // selected starting page / API endpoint to serve index
 app.get('/', (req, res) => {
-    res.render('index.ejs')
+    res.render('about.ejs')
 })
 
 // links between pages / API endpoint to serve each page
-app.get('/views/index.ejs', (req, res) => {
-    res.render('index.ejs')
-})
-
-app.get('/views/post.ejs', (req, res) => {
-    res.render('post.ejs')
-})
 
 app.get('/views/about.ejs', (req, res) => {
     res.render('about.ejs')
